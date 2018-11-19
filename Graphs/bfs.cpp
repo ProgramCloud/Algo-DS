@@ -1,37 +1,56 @@
 #include<iostream>
 #include<bits/stdc++.h>
 using namespace std;
-vector <int> v[10] ;   //Vector for maintaining adjacency list explained above
-int level[10]; //To determine the level of each node
-bool vis[10]; //Mark the node if visited 
-void bfs(int s) {
-        queue <int> q;
-        q.push(s);
-        level[ s ] = 0 ;  //Setting the level of the source node as 0
-        vis[ s ] = true;
-        while(!q.empty())
+class graph
+{
+    int v;
+    list<int> *adj;
+public:
+    graph(int v);
+    void addedge(int v,int w);
+    void bfs(int s);
+};
+graph::graph(int v)
+{
+    this->v=v;
+    adj=new list<int>[v];
+}
+void graph::addedge(int v,int w)
+{
+    adj[v].push_back(w);
+}
+void graph::bfs(int s)
+{
+    bool *visited=new bool[v];
+    for(int i=0;i<v;i++)
+        visited[i]=false;
+    list<int> queue;
+    visited[s]=true;
+    queue.push_back(s);
+    list<int>::iterator i;
+    while(!queue.empty())
+    {
+        s=queue.front();
+        cout<<s<<" ";queue.pop_front();
+        for(i=adj[s].begin();i!=adj[s].end();i++)
         {
-            int p = q.front();
-            q.pop();
-            
-            for(int i = 0;i < v[ p ].size() ; i++)
+            if(!visited[*i])
             {
-                if(vis[ v[ p ][ i ] ] == false)
-                {
-            //Setting the level of each node with an increment in the level of parent node
-                    level[ v[ p ][ i ] ] = level[ p ]+1;                 
-                    q.push(v[ p ][ i ]);
-                    vis[ v[ p ][ i ] ] = true;
-                }
+                visited[*i]=true;
+                queue.push_back(*i);
             }
         }
     }
-int main(){
-    int nodes,edges,x,y;
-    cin>>nodes>>edges;
-    for(int i = 0;i < edges;++i)
-        {
-                cin >> x >> y;
-            v[x].push_back(y);        //Insert y in adjacency list of x
-         }
+}
+int main()
+{
+    graph g(5);
+    g.addedge(0,1);
+    g.addedge(1,2);
+    g.addedge(2,3);
+    g.addedge(1,3);
+    g.addedge(2,1);
+    g.bfs(2);
+    return 0;
+
 }

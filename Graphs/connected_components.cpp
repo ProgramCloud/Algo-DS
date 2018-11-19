@@ -9,7 +9,7 @@ class Graph
 public:
  Graph(int v);
  void addEdge(int v,int w);
- void DFS(int s);
+ void connected();
 };
 Graph::Graph(int v)
 {
@@ -19,6 +19,7 @@ Graph::Graph(int v)
 void Graph::addEdge(int v,int w)
 {
 	adj[v].push_back(w);
+	adj[w].push_back(v);
 }
 void Graph::DFSutil(int v,bool visited[])
 {
@@ -26,28 +27,39 @@ void Graph::DFSutil(int v,bool visited[])
 	cout<<v<<" ";
 	list<int>::iterator i;
 	for(i=adj[v].begin();i!=adj[v].end();i++)
+	{
 		if(!visited[*i])
 			DFSutil(*i,visited);
+	}
 }
-void Graph::DFS(int v)
+void Graph::connected()
 {
+	int count=0;
 	bool *visited=new bool[v];
 	for(int i=0;i<v;i++)
 		visited[i]=false;
-	DFSutil(v,visited);
+	cout<<"Connected Components-"<<endl;
+	for(int i=0;i<v;i++)
+	{
+		if(visited[i]==false)
+		{
+			DFSutil(i,visited);
+			count++;
+			cout<<"\n";
+		}
+	}
+	cout<<"Number of Connected componenets-"<<count;
+	
 }
   
 int main() 
 { 
-    Graph g(4); 
-    g.addEdge(0, 1); 
-    g.addEdge(0, 2); 
-    g.addEdge(1, 2); 
-    g.addEdge(2, 0); 
+    Graph g(5); 
+    g.addEdge(1, 0); 
     g.addEdge(2, 3); 
-    g.addEdge(3, 3); 
-
-    g.DFS(2); 
+    g.addEdge(3, 4); 
+  
+    g.connected(); 
   
     return 0; 
 } 
